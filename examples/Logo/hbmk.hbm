@@ -1,0 +1,1 @@
+-w3 -es2 -lglfw3 -lcairo -lpthread -lm
