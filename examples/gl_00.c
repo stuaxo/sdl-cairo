@@ -48,7 +48,7 @@ int main ()
       cairo_surface_t * cr_surface = cairo_image_surface_create_for_data( (unsigned char *) sdl_surface->pixels, CAIRO_FORMAT_RGB24, sdl_surface->w, sdl_surface->h, sdl_surface->pitch );
       cairo_t * cr = cairo_create( cr_surface );
 
-      cairo_set_source_rgb( cr, 0.0, 0.0, 0.0 );
+      cairo_set_source_rgb( cr, 1.0, 1.0, 1.0 );
       cairo_set_operator( cr, CAIRO_OPERATOR_SOURCE );
       cairo_paint( cr );
 
