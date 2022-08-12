@@ -5,12 +5,14 @@
 #include <SDL2/SDL.h>
 #include <cairo/cairo.h>
 
-int main ()
+int main( void )
 {
    int width      = 720;
    int height     = 450;
    int videoFlags = SDL_WINDOW_RESIZABLE;
    int quit = 0;
+   double x;
+   double y;
 
    const char * text = "https://github.com/rjopek/sdl-cairo";
 
@@ -43,14 +45,10 @@ int main ()
 
    while( ! quit )
    {
-      SDL_FillRect( sdl_surface, NULL, 0 );
+      SDL_FillRect( sdl_surface, NULL, SDL_MapRGB( sdl_surface->format, 255, 255, 255 ) );
 
       cairo_surface_t * cr_surface = cairo_image_surface_create_for_data( (unsigned char *) sdl_surface->pixels, CAIRO_FORMAT_RGB24, sdl_surface->w, sdl_surface->h, sdl_surface->pitch );
       cairo_t * cr = cairo_create( cr_surface );
-
-      cairo_set_source_rgb( cr, 1.0, 1.0, 1.0 );
-      cairo_set_operator( cr, CAIRO_OPERATOR_SOURCE );
-      cairo_paint( cr );
 
       //---
       cairo_select_font_face( cr, "FreeMono", CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_BOLD );
@@ -60,16 +58,16 @@ int main ()
       cairo_text_extents_t te;
       cairo_text_extents( cr, text, &te );
 
-      double xc = ( width  - te.width ) / 2;
-      double yc = ( height + te.height ) / 2;
+      x = ( width  - te.width ) / 2;
+      y = ( height + te.height ) / 2;
 
-      cairo_move_to( cr, xc, yc );
+      cairo_move_to( cr, x, y );
       cairo_show_text( cr, text );
       //---
 
       SDL_SetRenderDrawColor( renderer, 0, 0, 0, 0 );
       SDL_RenderClear( renderer );
-      SDL_Texture * texture = SDL_CreateTextureFromSurface( renderer,sdl_surface );
+      SDL_Texture * texture = SDL_CreateTextureFromSurface( renderer, sdl_surface );
       SDL_RenderCopy( renderer, texture, NULL, NULL ) ;
       SDL_RenderPresent( renderer );
       SDL_DestroyTexture( texture );
@@ -113,7 +111,7 @@ int main ()
                break;
             }
          } while( SDL_PollEvent( &event ) );
-         printf( "window width=%d\n" "window height=%d\n", width, height );
+         printf( "window width  = %d\n" "window height = %d\n", width, height );
       }
    }
 

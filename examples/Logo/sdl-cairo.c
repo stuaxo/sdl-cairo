@@ -1,5 +1,5 @@
 /*
- *
+ * Copyright 2022 Rafał Jopek ( rafaljopek at hotmail com )
  */
 
 #include <math.h>

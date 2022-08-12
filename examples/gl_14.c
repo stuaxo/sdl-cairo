@@ -11,10 +11,8 @@ int main( void )
    int height     = 512;
    int videoFlags = SDL_WINDOW_RESIZABLE;
    int quit = 0;
-   double x;
-   double y;
-
-   const char * text = "C/C++";
+   int w;
+   int h;
 
    if( ( SDL_Init( SDL_INIT_VIDEO ) != 0 ) )
    {
@@ -43,6 +41,16 @@ int main( void )
       exit( EXIT_FAILURE );
    }
 
+   cairo_surface_t * image = cairo_image_surface_create_from_png( "../docs/assets/img/cairo.png" );
+   if( image == NULL )
+   {
+      SDL_Log( "cairo_image_surface_create_from_png() failed: %s\n", SDL_GetError() );
+      exit( EXIT_FAILURE );
+   }
+
+   w = cairo_image_surface_get_width( image );
+   h = cairo_image_surface_get_height( image );
+
    while( ! quit )
    {
       SDL_FillRect( sdl_surface, NULL, SDL_MapRGB( sdl_surface->format, 255, 255, 255 ) );
@@ -51,41 +59,9 @@ int main( void )
       cairo_t * cr = cairo_create( cr_surface );
 
       //---
-      cairo_set_source_rgb( cr, 0.690196078, 0.274509804, 0.760784314 );
-      cairo_arc( cr, width / 2, height / 2, 256.0, 0, 2 * M_PI );
-      cairo_fill( cr );
-
-      cairo_set_source_rgb( cr, 0.0, 0.0, 0.0 );
-      cairo_arc( cr, width / 2, height / 2, 256.0, 0, 2 * M_PI );
-      cairo_clip( cr );
-      cairo_set_source_rgb( cr, 1.0, 1.0, 1.0 );
-      cairo_rectangle( cr, 0, ( height - 220 ) / 2, width, 180 );
-      cairo_fill( cr );
-
-      cairo_set_source_rgb( cr, 0.0, 0.0, 0.0 );
-      cairo_rectangle( cr, 0, ( height - 280 ) / 2, width, 30 );
-      cairo_rectangle( cr, 0, ( height + 140 ) / 2, width, 30 );
-      cairo_fill( cr );
-
-      cairo_set_source_rgb( cr, 0.0, 0.0, 0.0 );
-      cairo_set_line_width( cr, 60.0 );
-      cairo_arc( cr, width / 2, height / 2, 256.0, 0, 2 * M_PI );
-      cairo_stroke( cr );
-
-      cairo_select_font_face( cr, "FreeMono", CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_BOLD );
-      cairo_set_font_size( cr, 144 );
-      cairo_set_source_rgb( cr, 0.0, 0.0, 0.0 );
-
-      cairo_text_extents_t te;
-      cairo_text_extents( cr, text, &te );
-
-      x = ( width  - te.width ) / 2;
-      y = ( height + te.height / 2 ) / 2;
-
-      cairo_move_to( cr, x, y );
-      cairo_show_text( cr, text );
+      cairo_set_source_surface( cr, image, width / 2 - w / 2 , height / 2 - h / 2 );
+      cairo_paint( cr );
       //---
-
       SDL_SetRenderDrawColor( renderer, 0, 0, 0, 0 );
       SDL_RenderClear( renderer );
       SDL_Texture * texture = SDL_CreateTextureFromSurface( renderer, sdl_surface );
@@ -94,6 +70,7 @@ int main( void )
       SDL_DestroyTexture( texture );
 
       cairo_surface_destroy( cr_surface );
+
       cairo_destroy( cr );
 
       SDL_Event event;
@@ -136,6 +113,7 @@ int main( void )
       }
    }
 
+   cairo_surface_destroy( image );
    SDL_DestroyRenderer( renderer );
    SDL_DestroyWindow( window );
    SDL_Quit();
