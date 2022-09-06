@@ -45,10 +45,15 @@ int main( void )
 
    while( ! quit )
    {
-      SDL_FillRect( sdl_surface, NULL, SDL_MapRGB( sdl_surface->format, 255, 255, 255 ) );
+      SDL_FillRect( sdl_surface, NULL, 0 );
+      //SDL_FillRect( sdl_surface, NULL, SDL_MapRGB( sdl_surface->format, 255, 255, 255 ) );
 
       cairo_surface_t * cr_surface = cairo_image_surface_create_for_data( (unsigned char *) sdl_surface->pixels, CAIRO_FORMAT_RGB24, sdl_surface->w, sdl_surface->h, sdl_surface->pitch );
       cairo_t * cr = cairo_create( cr_surface );
+
+      cairo_set_source_rgb( cr, 1.0, 1.0, 1.0 );
+      cairo_set_operator( cr, CAIRO_OPERATOR_SOURCE );
+      cairo_paint( cr );
 
       //---
       cairo_set_source_rgb( cr, 0.690196078, 0.274509804, 0.760784314 );
