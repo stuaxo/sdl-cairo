@@ -62,7 +62,7 @@ int main( void )
       cairo_set_source_surface( cr, image, width / 2 - w / 2 , height / 2 - h / 2 );
       cairo_paint( cr );
       //---
-      SDL_SetRenderDrawColor( renderer, 0, 0, 0, 0 );
+
       SDL_RenderClear( renderer );
       SDL_Texture * texture = SDL_CreateTextureFromSurface( renderer, sdl_surface );
       SDL_RenderCopy( renderer, texture, NULL, NULL ) ;
