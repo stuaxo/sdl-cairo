@@ -65,7 +65,6 @@ int main( void )
       cairo_show_text( cr, text );
       //---
 
-      SDL_SetRenderDrawColor( renderer, 0, 0, 0, 0 );
       SDL_RenderClear( renderer );
       SDL_Texture * texture = SDL_CreateTextureFromSurface( renderer, sdl_surface );
       SDL_RenderCopy( renderer, texture, NULL, NULL ) ;
